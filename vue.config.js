@@ -6,7 +6,7 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPl
 const IS_PROD = ['production', 'prod'].includes(process.env.NODE_ENV);
 const resolve = (dir) =>path.join(__dirname, dir);
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? '/site/vue-demo/': '/',
+    publicPath: process.env.NODE_ENV === 'production' ? '/': '/',
     // 公共路径
     indexPath: 'index.html',
     // 相对于打包路径index.html的路径
@@ -99,7 +99,7 @@ module.exports = {
             warnings: true,
             errors: true
         },
-        host: "localhost",
+        host: "0.0.0.0",
         port: 8080,
         // 端口号
         https: false,
@@ -110,13 +110,14 @@ module.exports = {
         // 热更新
         // proxy: 'http://localhost:8080' // 配置跨域处理,只有一个代理
         proxy: { //配置多个跨域
-            "/api": {
-                target: "http://172.11.11.11:7071",
+            [process.env.VUE_APP_BASEURL]: {
+                target: process.env.VUE_APP_BASEURL,
                 changeOrigin: true,
                 // ws: true,//websocket支持
                 secure: false,
                 pathRewrite: {
-                    "^/api": "/"
+                    // "^/api": "/"
+                    ['^' + process.env.VUE_APP_BASEURL]: ''
                 }
             },
             "/api2": {
